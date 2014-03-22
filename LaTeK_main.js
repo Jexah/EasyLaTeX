@@ -26,31 +26,59 @@
 
 
 
+var insert(before, after){
+	before = before || '';
+	after = after || '';
+	
+	$('#mainText').selection('insert', {
+		text: before,
+		mode: 'before'
+	});
+	$('#mainText').selection('insert', {
+		text: after,
+		mode: 'after'
+	});
+}
 
+//{ Shortcuts
+	var shortcuts = {};
+	// i = italic
+	shortcuts['73'] = function(){
+		insert('\\textit {', '}');
+	}
 
+	// b = bold
+	shortcuts['66'] = function(){
+		insert('\\textbf {', '}');
+	}
 
-var shortcuts = {};
-// i = italic
-shortcuts['73'] = ['\\textit {','}'];
-// b = bold
-shortcuts['66'] = ['\\textbf {','}'];
-// s = section
-shortcuts['83'] = ['\\section {','}'];
-// d = date
-shortcuts['68'] = ['\\today',''];
-// h = hline
-shortcuts['72'] = ['\\hline',''];
-// t = tabular
-shortcuts['84'] = ['\\begin {tabular} {|c|c|} \n','[0,0] & [1,0]\\\\\n[0,1] & [1,1]\\\\\n\\end{tabular}'];
-// q = quote
-shortcuts['81'] = ['\\begin {quote}\n','\n\\end{quote}'];
-// f = footnote
-shortcuts['70'] = ['','\\footnote {}'];
-// e = enumerate
-shortcuts['69'] = ['\\begin {enumerate}\n','\\item [item 1]\n\\item [item 2]\n\\end{enumerate}'];
-// p = dot points
-shortcuts['80'] = ['\\begin {itemize}\n','\\item [item 1]\n\\item [item 2]\n\\end{itemize}'];
+	// s = section
+	shortcuts['83'] = function(){
+		insert('\\section {', '}');
+	}
 
+	// d = date
+	shortcuts['68'] = function(){
+		insert('\\today');
+	}
+
+	// h = hline
+	shortcuts['72'] = function(){
+		insert('\\hline');
+	}
+
+	// t = tabular
+	shortcuts['84'] = ['\\begin {tabular} {|c|c|} \n','[0,0] & [1,0]\\\\\n[0,1] & [1,1]\\\\\n\\end{tabular}'];
+	// q = quote
+	shortcuts['81'] = ['\\begin {quote}\n','\n\\end{quote}'];
+	// f = footnote
+	shortcuts['70'] = ['','\\footnote {}'];
+	// e = enumerate
+	shortcuts['69'] = ['\\begin {enumerate}\n','\\item [item 1]\n\\item [item 2]\n\\end{enumerate}'];
+	// p = dot points
+	shortcuts['80'] = ['\\begin {itemize}\n','\\item [item 1]\n\\item [item 2]\n\\end{itemize}'];
+//}
+	
 var oldText;
 var clicked;
 
@@ -63,13 +91,8 @@ $(document).ready(function(){
 		$(this).text('Loading...');
 		$.ajax({
 			url: "http://latex.informatik.uni-halle.de/latex-online/latex.php",
-			// the name of the callback parameter, as specified by the YQL service
 			jsonp: "callback",
-		 
-			// tell jQuery we're expecting JSONP
 			dataType: "jsonp",
-		 
-			// tell YQL what we want and that we want JSON
 			data: {
 				'spw':'1',
 				'id':'767041_kqaVDbNIS3on',
@@ -78,8 +101,6 @@ $(document).ready(function(){
 				'finit':'nothing',
 				'aformat':format
 			},
-		 
-			// work with the response
 			complete: function( response ) {
 				clicked.text(oldText);
 				setTimeout(function(){window.open('http://latex.informatik.uni-halle.de/latex-online/temp/olatex_'+'767041_kqaVDbNIS3on'+'.'+format.toLowerCase(),(format==='DVI')?('_self'):'_blank');}, 500);
@@ -91,7 +112,7 @@ $(document).ready(function(){
 
 	$('#mainText').selection('insert', {
 		text: 	'\n\n\n\n\n\n\n\n\n'+
-				'\\documentclass{article}\n\\begin {document} \n\\author {} \n\\title {} \n\\maketitle \n\n\n\n\\end {document} '+
+				'\\documentclass {article}\n\\begin {document} \n\\author {} \n\\title {} \n\\maketitle \n\n\n\n\\end {document} '+
 				'\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
 		mode: 'before'
 	});
@@ -128,14 +149,7 @@ $(document).ready(function(){
 			// i
 			for(var i in shortcuts){
 				if(evtobj.keyCode.toString() === i){
-					$('#mainText').selection('insert', {
-					text: shortcuts[i][0],
-					mode: 'before'
-					});
-					$('#mainText').selection('insert', {
-						text: shortcuts[i][1],
-						mode: 'after'
-					});
+					shortcuts[i]();
 				}
 			}
 			$('#mainText').css({'background-color':'#555555'});
