@@ -66,17 +66,20 @@
 	
 	line-height:30px;
 }
-.button{
+.input{
 	position:absolute;
 	top:10px;
 	width:150px;
 	height:25px;
 }
+.textid{
+	left:calc(50% - 150px);
+}
 .pdf{
 	left:50%;
 }
 .dvi{
-	left:60%;
+	left:calc(50% - -150px);
 }
 .mainText{
 	position:absolute;

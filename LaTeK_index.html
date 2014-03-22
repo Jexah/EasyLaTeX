@@ -12,15 +12,14 @@
 
 <body>
 	<div id="guide" class="guide"></div>
-	<button id="viewPDF" class="button pdf">View PDF</button>
-	<button id="viewDVI" class="button dvi">Download DVI</button>
+	<input type="text" id="textid" class="input textid" value="unique_id" />
+	<button id="viewPDF" class="button input pdf">View PDF</button>
+	<button id="viewDVI" class="button input dvi">Download DVI</button>
 	
 	<textarea id="mainText" class="mainText"></textarea>
 	
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
-	<script src="/assets/scripts/ace.js"></script>
-	<script src="/assets/scripts/mode-latex.js"></script>
 	<script src="/assets/scripts/jquery.selection.js"></script>
 	<script src="/assets/scripts/LaTeK_main.js"></script>
 	

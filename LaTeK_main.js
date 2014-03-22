@@ -75,19 +75,24 @@ var insert = function(before, after){
 	
 	// q = quote
 	shortcuts['81'] = function(){
-		insert('\begin {quote}\n', '\n\\end{quote}');
+		insert('\\begin {quote}\n', '\n\\end{quote}');
 	}
 	
 	// f = footnote
 	shortcuts['70'] = function(){
 		insert('', '\\footnote {}');
+		$('#mainText').selection('setPos', {start: $('#mainText').selection('getPos') + 11, end: $('#mainText').selection('getPos') + 11});
 	}
 	
 	// e = enumerate
-	shortcuts['69'] = ['\\begin {enumerate}\n','\\item [item 1]\n\\item [item 2]\n\\end{enumerate}'];
+	shortcuts['69'] = function(){
+		insert('\\begin {enumerate}\n', '\\item [item 1]\n\\item [item 2]\n\\end{enumerate}');
+	}
 	
 	// p = dot points
-	shortcuts['80'] = ['\\begin {itemize}\n','\\item [item 1]\n\\item [item 2]\n\\end{itemize}'];
+	shortcuts['80'] = function(){
+		insert('\\begin {itemize}\n', '\\item [item 1]\n\\item [item 2]\n\\end{itemize}');
+	}
 	
 //}
 	
@@ -97,27 +102,31 @@ var clicked;
 $(document).ready(function(){
 
 	$('.button').click(function(){
-		var format = $(this).text().substring($(this).text().length-3, $(this).text().length);
-		oldText = $(this).text();
-		clicked = $(this);
-		$(this).text('Loading...');
-		$.ajax({
-			url: "http://latex.informatik.uni-halle.de/latex-online/latex.php",
-			jsonp: "callback",
-			dataType: "jsonp",
-			data: {
-				'spw':'1',
-				'id':'767041_kqaVDbNIS3on',
-				'compile':'Übersetzen',
-				'quellcode':$('#mainText').text(),
-				'finit':'nothing',
-				'aformat':format
-			},
-			complete: function( response ) {
-				clicked.text(oldText);
-				setTimeout(function(){window.open('http://latex.informatik.uni-halle.de/latex-online/temp/olatex_'+'767041_kqaVDbNIS3on'+'.'+format.toLowerCase(),(format==='DVI')?('_self'):'_blank');}, 500);
-			}
-		});
+		if($('#textid').val() === 'unique_id'){
+			alert('Please enter a unique identifier');
+		}else{
+			var format = $(this).text().substring($(this).text().length-3, $(this).text().length);
+			oldText = $(this).text();
+			clicked = $(this);
+			$(this).text('Loading...');
+			$.ajax({
+				url: "http://latex.informatik.uni-halle.de/latex-online/latex.php",
+				jsonp: "callback",
+				dataType: "jsonp",
+				data: {
+					'spw':'1',
+					'id':$('#textid').val(),
+					'compile':'Übersetzen',
+					'quellcode':$('#mainText').val(),
+					'finit':'nothing',
+					'aformat':format
+				},
+				complete: function( response ) {
+					clicked.text(oldText);
+					setTimeout(function(){window.open('http://latex.informatik.uni-halle.de/latex-online/temp/olatex_'+$('#textid').val()+'.'+format.toLowerCase(),(format==='DVI')?('_self'):'_blank');}, 500);
+				}
+			});
+		}
 	});
 
 	var takingInput = false;
