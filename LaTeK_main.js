@@ -102,8 +102,11 @@ var clicked;
 $(document).ready(function(){
 
 	$('.button').click(function(){
+		var encodedSize = encodeURI("http://latex.informatik.uni-halle.de/latex-online/latex.phpspw:1id:$(#textid).val(),ompile:Übersetzen,quellcode:$(#mainText).val(),finit:nothing,aformat:format"+$('#mainText').val()).length;
 		if($('#textid').val() === 'unique_id'){
-			alert('Please enter a unique identifier');
+			alert('Please enter a unique identifier.');
+		}else if(encodedSize > 9626){
+			alert('The text is too long to compile, please compile it elsewhere. Encoded size: '+encodedSize+'/9626');
 		}else{
 			var format = $(this).text().substring($(this).text().length-3, $(this).text().length);
 			oldText = $(this).text();
@@ -111,7 +114,6 @@ $(document).ready(function(){
 			$(this).text('Loading...');
 			$.ajax({
 				url: "http://latex.informatik.uni-halle.de/latex-online/latex.php",
-				jsonp: "callback",
 				dataType: "jsonp",
 				data: {
 					'spw':'1',
@@ -121,7 +123,7 @@ $(document).ready(function(){
 					'finit':'nothing',
 					'aformat':format
 				},
-				complete: function( response ) {
+				complete: function(response) {
 					clicked.text(oldText);
 					setTimeout(function(){window.open('http://latex.informatik.uni-halle.de/latex-online/temp/olatex_'+$('#textid').val()+'.'+format.toLowerCase(),(format==='DVI')?('_self'):'_blank');}, 500);
 				}
@@ -140,7 +142,6 @@ $(document).ready(function(){
 
 	function KeyPress(e) {
 		var evtobj = window.event? event : e
-		//alert(evtobj.keyCode);
 		if(evtobj.keyCode == 9){
 			$('#mainText').selection('insert', {
 				text: '\t',
@@ -165,9 +166,6 @@ $(document).ready(function(){
 				e.preventDefault();
 			}
 		}else if(takingInput){
-			
-			//alert(evtobj.keyCode);
-			// i
 			for(var i in shortcuts){
 				if(evtobj.keyCode.toString() === i){
 					shortcuts[i]();
