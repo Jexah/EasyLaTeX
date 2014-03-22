@@ -26,7 +26,7 @@
 
 
 
-var insert(before, after){
+var insert = function(before, after){
 	before = before || '';
 	after = after || '';
 	
@@ -41,6 +41,7 @@ var insert(before, after){
 }
 
 //{ Shortcuts
+
 	var shortcuts = {};
 	// i = italic
 	shortcuts['73'] = function(){
@@ -68,15 +69,26 @@ var insert(before, after){
 	}
 
 	// t = tabular
-	shortcuts['84'] = ['\\begin {tabular} {|c|c|} \n','[0,0] & [1,0]\\\\\n[0,1] & [1,1]\\\\\n\\end{tabular}'];
+	shortcuts['84'] = function(){
+		insert('\\begin {tabular} {|c|c|} \n', '[0,0] & [1,0]\\\\\n[0,1] & [1,1]\\\\\n\\end{tabular}');
+	};
+	
 	// q = quote
-	shortcuts['81'] = ['\\begin {quote}\n','\n\\end{quote}'];
+	shortcuts['81'] = function(){
+		insert('\begin {quote}\n', '\n\\end{quote}');
+	}
+	
 	// f = footnote
-	shortcuts['70'] = ['','\\footnote {}'];
+	shortcuts['70'] = function(){
+		insert('', '\\footnote {}');
+	}
+	
 	// e = enumerate
 	shortcuts['69'] = ['\\begin {enumerate}\n','\\item [item 1]\n\\item [item 2]\n\\end{enumerate}'];
+	
 	// p = dot points
 	shortcuts['80'] = ['\\begin {itemize}\n','\\item [item 1]\n\\item [item 2]\n\\end{itemize}'];
+	
 //}
 	
 var oldText;
@@ -97,7 +109,7 @@ $(document).ready(function(){
 				'spw':'1',
 				'id':'767041_kqaVDbNIS3on',
 				'compile':'Übersetzen',
-				'quellcode':$('#mainText').val(),
+				'quellcode':$('#mainText').text(),
 				'finit':'nothing',
 				'aformat':format
 			},
@@ -161,9 +173,6 @@ $(document).ready(function(){
 
 	document.onkeydown = KeyPress;
 
-	
-	
-	
 	
 	
 });
