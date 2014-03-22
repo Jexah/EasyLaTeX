@@ -51,7 +51,41 @@ shortcuts['69'] = ['\\begin {enumerate}\n','\\item [item 1]\n\\item [item 2]\n\\
 // p = dot points
 shortcuts['80'] = ['\\begin {itemize}\n','\\item [item 1]\n\\item [item 2]\n\\end{itemize}'];
 
+var oldText;
+var clicked;
+
 $(document).ready(function(){
+
+	$('.button').click(function(){
+		var format = $(this).text().substring($(this).text().length-3, $(this).text().length);
+		oldText = $(this).text();
+		clicked = $(this);
+		$(this).text('Loading...');
+		$.ajax({
+			url: "http://latex.informatik.uni-halle.de/latex-online/latex.php",
+			// the name of the callback parameter, as specified by the YQL service
+			jsonp: "callback",
+		 
+			// tell jQuery we're expecting JSONP
+			dataType: "jsonp",
+		 
+			// tell YQL what we want and that we want JSON
+			data: {
+				'spw':'1',
+				'id':'767041_kqaVDbNIS3on',
+				'compile':'Übersetzen',
+				'quellcode':$('#mainText').val(),
+				'finit':'nothing',
+				'aformat':format
+			},
+		 
+			// work with the response
+			complete: function( response ) {
+				clicked.text(oldText);
+				setTimeout(function(){window.open('http://latex.informatik.uni-halle.de/latex-online/temp/olatex_'+'767041_kqaVDbNIS3on'+'.'+format.toLowerCase(),(format==='DVI')?('_self'):'_blank');}, 500);
+			}
+		});
+	});
 
 	var takingInput = false;
 
@@ -113,15 +147,12 @@ $(document).ready(function(){
 
 	document.onkeydown = KeyPress;
 
-});
-
 	
-
-
-
-
-
-
+	
+	
+	
+	
+});
 
 
 
