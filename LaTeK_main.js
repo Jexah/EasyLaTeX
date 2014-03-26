@@ -44,54 +44,66 @@ var insert = function(before, after){
 
 	var shortcuts = {};
 	// i = italic
-	shortcuts['73'] = function(){
-		insert('\\textit {', '}');
+	shortcuts['73'] = {
+		create:function(){insert('\\textit {', '}')},
+		preview:'\\textit {}'
 	}
 
 	// b = bold
-	shortcuts['66'] = function(){
-		insert('\\textbf {', '}');
+	shortcuts['66'] = {
+		create:function(){insert('\\textbf {', '}')},
+		preview:'\\textbf {}'
 	}
 
 	// s = section
-	shortcuts['83'] = function(){
-		insert('\\section {', '}');
+	shortcuts['83'] = {
+		create:function(){insert('\\section {', '}')},
+		preview:'\\section {}'
 	}
 
 	// d = date
-	shortcuts['68'] = function(){
-		insert('\\today');
+	shortcuts['68'] = {
+		create:function(){insert('\\today')},
+		preview:'\\today'
 	}
 
 	// h = hline
-	shortcuts['72'] = function(){
-		insert('\\hline');
+	shortcuts['72'] = {
+		create:function(){insert('\\hline')},
+		preview:'\\hline'
 	}
 
 	// t = tabular
-	shortcuts['84'] = function(){
-		insert('\\begin {tabular} {|c|c|} \n', '[0,0] & [1,0]\\\\\n[0,1] & [1,1]\\\\\n\\end{tabular}');
+	shortcuts['84'] = {
+		create:function(){insert('\\begin {tabular} {|c|c|} \n', '[0,0] & [1,0]\\\\\n[0,1] & [1,1]\\\\\n\\end {tabular}')},
+		preview:'\\begin {tabular}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\\end {tabular}'
 	};
 	
 	// q = quote
-	shortcuts['81'] = function(){
-		insert('\\begin {quote}\n', '\n\\end{quote}');
+	shortcuts['81'] = {
+		create:function(){insert('\\begin {quote}\n', '\n\\end {quote}')},
+		preview:'\\begin {quote}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\\end {quote}'
 	}
 	
 	// f = footnote
-	shortcuts['70'] = function(){
-		insert('', '\\footnote {}');
-		$('#mainText').selection('setPos', {start: $('#mainText').selection('getPos') + 11, end: $('#mainText').selection('getPos') + 11});
+	shortcuts['70'] = {
+		create:function(){
+			insert('', '\\footnote {}');
+			$('#mainText').selection('setPos', {start: $('#mainText').selection('getPos') + 11, end: $('#mainText').selection('getPos') + 11})
+		},
+		preview:'\\footnote {}'
 	}
 	
 	// e = enumerate
-	shortcuts['69'] = function(){
-		insert('\\begin {enumerate}\n', '\\item [item 1]\n\\item [item 2]\n\\end{enumerate}');
+	shortcuts['69'] = {
+		create:function(){insert('\\begin {enumerate}\n', '\\item [item 1]\n\\item [item 2]\n\\end {enumerate}')},
+		preview:'\\begin {enumerate}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\\end {enumerate}'
 	}
 	
 	// p = dot points
-	shortcuts['80'] = function(){
-		insert('\\begin {itemize}\n', '\\item [item 1]\n\\item [item 2]\n\\end{itemize}');
+	shortcuts['80'] = {
+		create:function(){insert('\\begin {itemize}\n', '\\item [item 1]\n\\item [item 2]\n\\end {itemize}')},
+		preview:'\\begin {itemize}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\\end {itemize}'
 	}
 	
 //}
@@ -157,7 +169,8 @@ $(document).ready(function(){
 			else{
 				var guideHTML = "";
 				for(var i in shortcuts){
-					guideHTML += '<span class="big">'+String.fromCharCode(i).toLowerCase()+'</span>:' + '' + shortcuts[i][0]+shortcuts[i][1] + '<br /><br />';
+					if(!shortcuts.hasOwnProperty(i)){continue;}
+					guideHTML += '<span class="big">'+String.fromCharCode(i).toLowerCase()+'</span>:' + '' + shortcuts[i].preview + '<br /><br />';
 				}
 				$('#guide').html(guideHTML);
 			
@@ -168,7 +181,7 @@ $(document).ready(function(){
 		}else if(takingInput){
 			for(var i in shortcuts){
 				if(evtobj.keyCode.toString() === i){
-					shortcuts[i]();
+					shortcuts[i].create();
 				}
 			}
 			$('#mainText').css({'background-color':'#555555'});
