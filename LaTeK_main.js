@@ -137,7 +137,7 @@ $(document).ready(function(){
 				},
 				complete: function(response) {
 					clicked.text(oldText);
-					setTimeout(function(){window.open('http://latex.informatik.uni-halle.de/latex-online/temp/olatex_'+$('#textid').val()+'.'+format.toLowerCase(),(format==='DVI')?('_self'):'_blank');}, 500);
+					setTimeout(function(){window.open('http://latex.informatik.uni-halle.de/latex-online/temp/olatex_'+$('#textid').val()+'.'+format.toLowerCase(),(format==='DVI')?('_self'):'_blank');}, 1000);
 				}
 			});
 		}
