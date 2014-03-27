@@ -114,7 +114,7 @@ var clicked;
 $(document).ready(function(){
 
 	$('.button').click(function(){
-		var encodedSize = encodeURI("http://latex.informatik.uni-halle.de/latex-online/latex.phpspw:1id:$(#textid).val(),ompile:Übersetzen,quellcode:$(#mainText).val(),finit:nothing,aformat:format"+$('#mainText').val()).length;
+		var encodedSize = encodeURI($('#mainText').val()).length + 200;
 		if($('#textid').val() === 'unique_id'){
 			alert('Please enter a unique identifier.');
 		}else if(encodedSize > 9626){
